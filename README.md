@@ -15,15 +15,9 @@
 
 ## 🔨 Hướng dẫn Demo Bẻ Khóa (Offline Cracking Lab)
 
-Nhóm triển khai 2 phương pháp tấn công mật khẩu ngoại tuyến tự xây dựng (không sử dụng công cụ bên thứ ba như Hashcat):
+Tạo bảng Rainbow_table bằng công cụ knotty ( được viết bằng ngôn ngữ php). Rồi so sánh dataset có chứa các mã băm thuật toán md5 bị rò rỉ với bảng rainbow_table được tạo từ hàng triệu mật khẩu đã được băm sang md5.
 
-### 1. Phương pháp Brute Force (Tấn công vét cạn)
-Thử tất cả các tổ hợp ký tự có thể dựa trên tập charset để tìm lại mật khẩu gốc từ chuỗi hash.
-- `cd crack_lab`
-- `python generate_dataset.py`
-- `python brute_force.py`
-
-### 2. Phương pháp Rainbow Table (Bảng cầu vồng)
-Sử dụng bảng tra cứu được tính toán sẵn chứa ánh xạ giữa chuỗi hash và mật khẩu để tra cứu nhanh.
-- `cd crack_lab`
-- `python rainbow_table.py`
+1. git clone https://github.com/prodigiousMind/knotty.git
+2. cd knotty
+3. for i in $(cat plaintext-wordlists.txt); do php knotty.php plaintext=$i salt1= salt2= format=2 algo=md5; done > rainbow_table.txt or ( php -r '$f=fopen("plaintext-wordlists.txt","r"); while(($p=fgets($f))!==false){ $p=rtrim($p,"\r\n"); echo md5($p).":md5:".$p."\n"; } fclose($f);' > rainbow_table.txt )
+4. grep -f database.txt rainbowtable.txt
